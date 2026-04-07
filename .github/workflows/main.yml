@@ -1,0 +1,35 @@
+name: Build Grok Mac App
+
+on:
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install pyinstaller Pillow
+
+      - name: Build with PyInstaller
+        run: |
+          # Используем метод Бананы: файл logo.ico просто кладется внутрь
+          pyinstaller --noconfirm --onefile --windowed --add-data "logo.ico:." GrokManager.py
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Grok-MacOS
+          path: dist/GrokManager.app
