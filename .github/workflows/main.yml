@@ -20,22 +20,15 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: |
-          pip install pyinstaller Pillow
+        run: pip install pyinstaller Pillow
 
       - name: Build with PyInstaller
         run: |
-          # 1. Собираем приложение с твоими названиями файлов
-          pyinstaller --noconfirm --onefile --windowed --add-data "grok.ico:." GrokPromptManager.py
-          
-          # 2. Переходим в папку с результатом
-          cd dist
-          
-          # 3. Упаковываем в ZIP с сохранением прав доступа Mac (флаг -r)
-          zip -r GrokPromptManager_MacOS.zip GrokPromptManager.app
+          # Убран флаг --windowed, чтобы PyInstaller сделал ОДИН исполняемый файл
+          pyinstaller --noconfirm --onefile --add-data "grok.ico:." GrokPromptManager.py
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Grok-MacOS-Final
-          path: dist/GrokPromptManager_MacOS.zip
+          name: Grok-Single-File
+          path: dist/GrokPromptManager
