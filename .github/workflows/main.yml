@@ -20,14 +20,18 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install pyinstaller Pillow
+        run: |
+          pip install pyinstaller Pillow
 
       - name: Build with PyInstaller
         run: |
-          # Собираем программу
+          # 1. Собираем приложение с твоими названиями файлов
           pyinstaller --noconfirm --onefile --windowed --add-data "grok.ico:." GrokPromptManager.py
-          # Сразу упаковываем в ZIP внутри сервера (как в Банане)
+          
+          # 2. Переходим в папку с результатом
           cd dist
+          
+          # 3. Упаковываем в ZIP с сохранением прав доступа Mac (флаг -r)
           zip -r GrokPromptManager_MacOS.zip GrokPromptManager.app
 
       - name: Upload Artifact
